@@ -25,7 +25,7 @@ var init = function (window) {
         // TODO 2: Draw a circle //
         function drawCircle() { 
             circle = draw.randomCircleInArea(canvas, true, true, '#999', 2);
-            physikz.addRandomVelocity(circle, canvas);
+            physikz.addRandomVelocity(circle, canvas, 10, 10);
             view.addChild(circle);
             circles.push(circle);
         }
@@ -44,21 +44,15 @@ var init = function (window) {
         and check to see if it has drifted off the screen.         
         */
         function update() {
-            // TODO 4 : Update the circle's position //
-            physikz.updatePosition([0]);
-            physikz.updatePosition([1]);
-            physikz.updatePosition([2]);
-            physikz.updatePosition([3]);
-            physikz.updatePosition([4]);
+            // TODO 4 : Update the circle's position /
             
             // TODO 5 : Call game.checkCirclePosition() on your circles.
-           game.checkCirclePosition([0]);
-           game.checkCirclePosition([1]);
-           game.checkCirclePosition([2]);
-           game.checkCirclePosition([3]);
-           game.checkCirclePosition([4]);
-            // TODO 8 : Iterate over the array
            
+            // TODO 8 : Iterate over the array
+           for (var i = 0; i < circles.length; i++){
+                physikz.updatePosition(circles[i]);
+                game.checkCirclePosition(circles[i]);
+            }
             
         }
     
@@ -75,7 +69,15 @@ var init = function (window) {
             }
             
             // TODO 5 : YOUR CODE STARTS HERE //////////////////////
-            
+            if (circle.x < 0) {
+                circle.x = canvas.width;
+            }
+            if (circle.y > canvas.height) {
+                circle.y = 0;
+            }
+            if (circle.y < 0) {
+                circle.y = canvas.height;
+            }
 
             // YOUR TODO 5 CODE ENDS HERE //////////////////////////
         };
@@ -93,7 +95,7 @@ var init = function (window) {
         game.update = update;
         
         app.addUpdateable(window.opspark.game);
-    }
+    };
 };
 
 // DON'T REMOVE THIS CODE //////////////////////////////////////////////////////
