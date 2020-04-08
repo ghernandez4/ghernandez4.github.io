@@ -57,7 +57,7 @@
         }
 
         hud.setIntegrity(100);
-        hud.updateOf(10000);
+        hud.updateOf(2000);
         
         /* Create a new game item of the given type and hit radius. Each game
            item is a empty createjs container. To draw something for a game item
