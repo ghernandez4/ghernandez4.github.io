@@ -18,7 +18,7 @@ var init = function (window) {
         ////////////////////////////////////////////////////////////
         ///////////////// PROGRAM SETUP ////////////////////////////
         ////////////////////////////////////////////////////////////
-        alert('Watch the Magic')
+        alert('IMMA DO A BACKFLIP');
         // TODO 1 : Declare and initialize our variables
         var circle;
         var circles = [];
