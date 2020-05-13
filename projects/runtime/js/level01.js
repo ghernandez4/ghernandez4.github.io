@@ -27,16 +27,16 @@ var level01 = function (window) {
 
         // BEGIN EDITING YOUR CODE HERE
 function createSawBlade(x,y){
-var hitZoneSize = 25;
-var damageFromObstacle = 20;
-var sawBladeHitZone = game.createObstacle(hitZoneSize, damageFromObstacle);
-sawBladeHitZone.x = x;
-sawBladeHitZone.y = y;
-game.addGameItem(sawBladeHitZone); 
-var obstacleImage = draw.bitmap('img/sawblade.png');
-sawBladeHitZone.addChild(obstacleImage);
-obstacleImage.x = -25;
-obstacleImage.y = -25;
+    var hitZoneSize = 25;
+    var damageFromObstacle = 20;
+    var sawBladeHitZone = game.createObstacle(hitZoneSize, damageFromObstacle);
+    sawBladeHitZone.x = x;
+    sawBladeHitZone.y = y;
+    game.addGameItem(sawBladeHitZone); 
+    var obstacleImage = draw.bitmap('img/sawblade.png');
+    sawBladeHitZone.addChild(obstacleImage);
+    obstacleImage.x = -25;
+    obstacleImage.y = -25;
 }    
 
  for (var i = 0; i < levelData.gameItems.length; i++) {
@@ -47,17 +47,17 @@ obstacleImage.y = -25;
  }
  function createEnemy(x,y) {
      var enemy =  game.createGameItem('enemy',25);
-var redSquare = draw.rect(50,50,'red');
-redSquare.x = -25;
-redSquare.y = -25;
-enemy.addChild(redSquare);
-enemy.x = x;
-enemy.y = y;
- game.addGameItem(enemy);
- enemy.velocityX = -2;
- enemy.rotationalVelocity = 10;
- enemy.onPlayerCollision = function() {
-        game.changeIntegrity(-50);
+    var redSquare = draw.rect(50,50,'red');
+    redSquare.x = -25;
+    redSquare.y = -25;
+    enemy.addChild(redSquare);
+    enemy.x = x;
+    enemy.y = y;
+    game.addGameItem(enemy);
+    enemy.velocityX = -2;
+    enemy.rotationalVelocity = 10;
+    enemy.onPlayerCollision = function() {
+    game.changeIntegrity(-50);
     };
  enemy.onProjectileCollision = function() {
         game.increaseScore(1000);
