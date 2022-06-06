@@ -43,6 +43,7 @@ function runProgram(){
 
   // one-time setup
   var interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
+  //enables controls for players 1 and 2
   $(document).on('keydown', handleKeyDown);                           // change 'eventType' to the type of event you want to handle
   $(document).on('keyup', handleKeyUp);  
   $(document).on('keydown', handleKeyDown2);                           // change 'eventType' to the type of event you want to handle
@@ -60,12 +61,12 @@ function runProgram(){
     redrawGameItem();
     checkPosition();
     checkPosition2();
-    checkCollision();
   }
   
   /* 
   Called in response to events.
   */
+ //movement function for player 1
   function handleKeyDown(event) {
     if (event.which === KEY.DOWN) {
       speed1Y = 5;
@@ -79,22 +80,7 @@ function runProgram(){
     if (event.which === KEY.LEFT) {
       speed1X = -5;
     }
-  }  
-  function handleKeyDown2(event) {
-    if (event.which === KEY.S) {
-      speed2Y = 5;
-    }
-    if (event.which === KEY.W) {
-      speed2Y = -5;
-    }
-    if (event.which === KEY.D) {
-      speed2X = 5;
-    }
-    if (event.which === KEY.A) {
-      speed2X = -5;
-    }
-  }
-
+  } 
   function handleKeyUp(event) {
     if (event.which !== KEY.DOWN) {
       speed1Y = 0;
@@ -107,6 +93,21 @@ function runProgram(){
     }
     if (event.which !== KEY.DOWN) {
       speed1X = 0;
+    }
+  } 
+  //movement function for player 2
+  function handleKeyDown2(event) {
+    if (event.which === KEY.S) {
+      speed2Y = 5;
+    }
+    if (event.which === KEY.W) {
+      speed2Y = -5;
+    }
+    if (event.which === KEY.D) {
+      speed2X = 5;
+    }
+    if (event.which === KEY.A) {
+      speed2X = -5;
     }
   }
   function handleKeyUp2(event) {
@@ -123,6 +124,7 @@ function runProgram(){
       speed2X = 0;
     }
   }
+  //set borders for player 1
 function checkPosition() {
   if (location1X > 390) {
     location1X = 390;
@@ -137,6 +139,7 @@ function checkPosition() {
     location1Y = 0;
   }
 }
+//set border for player 2
 function checkPosition2() {
   if (location2X > 390) {
     location2X = 390;
@@ -170,18 +173,6 @@ function checkPosition2() {
     $('#walker2').css('top', location2Y);
   }
   
-  function checkCollision() {
-    if (location1X == location2X && location1Y == location2Y) {
-      console.log('Collision')
-      if ($('#walker').css('background-color') === 'red') {
-        $('#walker').css('background-color', 'teal');
-        $('#walker2').css('background-color', 'red');
-      } else if ($('#walker2').css('background-color') === 'red') {
-        $('#walker2').css('background-color', 'teal');
-        $('#walker').css('background-color', 'red');
-      }
-    }
-  }
   function endGame() { 
     // stop the interval timer
     clearInterval(interval);
