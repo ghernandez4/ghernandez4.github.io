@@ -26,3 +26,19 @@ button {
 #reset {
   background: red;
 }
+
+#red {
+  background: red;
+}
+
+#blue {
+  background: blue;
+}
+
+#green {
+  background: green; 
+}
+
+#blur {
+  background: gray;
+}

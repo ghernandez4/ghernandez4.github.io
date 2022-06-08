@@ -2,7 +2,10 @@
 // as soon as the page loads.
 $(document).ready(function () {
     render($("#display"), image);
-    $("#apply").on("click", applyAndRender);
+    $("#red").on("click", redFilter);
+    $('#blue').on('click', blueFilter);
+    $('#green').on('click', greenFilter);
+    $('#blur').on('click', smudgeFilter);
     $("#reset").on("click", resetAndRender);
 });
 
@@ -17,46 +20,102 @@ function resetAndRender() {
 }
 
 // this function applies the filters to the image and is where you should call
-// all of your apply functions
-function applyAndRender() {
+//applies red filter when called
+function redFilter() {
     // Multiple TODOs: Call your apply function(s) here
-    applyFilter();
-
-
-
+    applyFilterNoBackground(reddify);
     // do not change the below line of code
     render($("#display"), image);
 }
+//applies blue filter when called
+function blueFilter() {
+    applyFilterNoBackground(increaseBlue);
+    render($('#display'), image);
+}
+//applies green filter when called
+function greenFilter() {
+    applyFilterNoBackground(increaseGreen);
+    render($('#display'), image);
+}
 
+//blurs image
+function smudgeFilter() {
+    applyFilterNoBackground(smudge);
+    render($('#display'), image);
+}
 /////////////////////////////////////////////////////////
 // "apply" and "filter" functions should go below here //
 /////////////////////////////////////////////////////////
 
-// TODO 1, 2 & 4: Create the applyFilter function here
-function applyFilter() {
-    for (var r = 0; r < image.length; r++) {
-        var row = image[r];
+//Unused function
 
-        for (var c = 0; c < row.length; c++) {
-            var rgbString = row[c];
-            var rgbNumbers = rgbStringToArray(rgbString);
-            rgbNumbers[RED] = 0;
-            rgbString = rgbArrayToString(rgbNumbers);
-            rgbString = row[c];
+// TODO 1, 2 & 4: Create the applyFilter function here
+//function applyFilter(filterFunction) {
+//    for (var i = 0; i < image.length; i++) {
+//        var column = image[i];
+//
+//        for (var c = 0; c < column.length; c++) {
+//                var rgbString  = image[i][c];
+//                var rgbNumbers = rgbStringToArray(rgbString);
+//                filterFunction(rgbNumbers);
+//                rgbString = rgbArrayToString(rgbNumbers);
+//                image[i][c] = rgbString;
+//        }
+//    }
+// }
+
+//Applies filter without changing the background
+function applyFilterNoBackground(filterFunction) {
+    for (var r = 0; r < image.length; r++) {
+        var columnR = image[r];
+
+        for (var d = 0; d < columnR.length; d++) {
+                var rgbStringNoBackground = image[r][d];
+                if (rgbStringNoBackground === image[0][0]) {
+                    image[r][d] = image[0][0];
+                } else {
+                var rgbNumbersNoBackground = rgbStringToArray(rgbStringNoBackground);
+                filterFunction(rgbNumbersNoBackground);
+                rgbStringNoBackground = rgbArrayToString(rgbNumbersNoBackground);
+                image[r][d] = rgbStringNoBackground;
+                }
         }
     }
 }
 
-// TODO 7: Create the applyFilterNoBackground function
+//keeps rgb values between 0 and 255
+function keepInBounds(num) {
+return ((num > 255) ? 255
+        :(num < 0) ? 0
+        :num);
+}
+// increases red each time it is called
+function reddify(arr) {
+    arr[RED] = keepInBounds(arr[RED] + 50);
+}
 
-
-// TODO 5: Create the keepInBounds function
-
-
-// TODO 3: Create reddify function
-
-
-// TODO 6: Create more filter functions
-
+//increases blue filter each time it is called
+function increaseBlue(arr) {
+    arr[BLUE] = keepInBounds(arr[BLUE] + 50);
+}
+//increases green filter each time it is called
+function increaseGreen(arr) {
+    arr[GREEN] = keepInBounds(arr[GREEN] + 50);
+}
 
 // CHALLENGE code goes below here
+//smudges image when called
+function smudge(arr) {
+    for (i = 0; i < image.length; i++) {
+        var columnS = image[i]
+        for (y = 1; y < columnS.length; y++) {
+            var curPixel = image[i][y];
+            var prevPixel = image[i][y - 1];
+            var valPixel = rgbStringToArray(curPixel);
+            var valPrevPixel = rgbStringToArray(prevPixel)
+            valPixel[RED] = valPrevPixel[GREEN];
+            curPixel = rgbArrayToString(valPixel);
+            image[i][y] = curPixel
+        }
+    }
+}
