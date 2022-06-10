@@ -1,6 +1,6 @@
 // flag to prevent running simultaneous sorts by clicking 
 // "start" multiple times
-let STARTED = false;
+var STARTED = false;
 
 $(document).ready(function(){
     $("#goButton").on("click", function(){
