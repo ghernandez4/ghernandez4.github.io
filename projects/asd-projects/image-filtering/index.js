@@ -40,7 +40,7 @@ function greenFilter() {
 
 //blurs image
 function smudgeFilter() {
-    applyFilterNoBackground(smudge);
+    applyFilter(smudge);
     render($('#display'), image);
 }
 /////////////////////////////////////////////////////////
@@ -49,20 +49,20 @@ function smudgeFilter() {
 
 //Unused function
 
-// TODO 1, 2 & 4: Create the applyFilter function here
-//function applyFilter(filterFunction) {
-//    for (var i = 0; i < image.length; i++) {
-//        var column = image[i];
-//
-//        for (var c = 0; c < column.length; c++) {
-//                var rgbString  = image[i][c];
-//                var rgbNumbers = rgbStringToArray(rgbString);
-//                filterFunction(rgbNumbers);
-//                rgbString = rgbArrayToString(rgbNumbers);
-//                image[i][c] = rgbString;
-//        }
-//    }
-// }
+//TODO 1, 2 & 4: Create the applyFilter function here
+function applyFilter(filterFunction) {
+    for (var i = 0; i < image.length; i++) {
+        var column = image[i];
+
+        for (var c = 0; c < column.length; c++) {
+                var rgbString  = image[i][c];
+                var rgbNumbers = rgbStringToArray(rgbString);
+                filterFunction(rgbNumbers);
+                rgbString = rgbArrayToString(rgbNumbers);
+                image[i][c] = rgbString;
+        }
+    }
+ }
 
 //Applies filter without changing the background
 function applyFilterNoBackground(filterFunction) {

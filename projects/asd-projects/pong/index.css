@@ -19,3 +19,29 @@ body {
 /*   left: 100px; */  /* Uncomment if you want to set a "starting" position */
 /*   top: 100px;  */  /* Uncomment if you want to set a "starting" position */
 }
+
+#paddle1 {
+  position: absolute;
+  left: 1;
+}
+
+#paddle2 {
+  position: relative;
+  right: 1;
+}
+
+#score1 {
+  color: white;
+}
+
+#score2 {
+  color: white;
+}
+
+#ball {
+  background-color: red;
+  border-radius: 50%;
+  position: fixed;
+  top: 1;
+  right: 1;
+}
