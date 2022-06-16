@@ -31,6 +31,16 @@ body {
   top: 260px;
 }
 
+.body{
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  background-color: green;
+  position: absolute;
+  left: 120px;
+  top: 340px;
+}
+
 /*#gameItem {
   background-color: teal;
   width: 50px;

@@ -4,7 +4,7 @@
 4. if (positionX === wall.length) {end}, if (positionX === -1) {end}, if (positionY === 0) {end}, if (positionY === wall.height) {end}, if (positionX === body.x && positionY === body.y) {end}, if (snake.length === board.width * board.width - 1) {end}
 
 5. The board (static), apple (static), snake (animated)
-6. board, apple, snake
+6. board, apple, snake, count
 
 7. on keyboard press, change direction; on tick, check for new direction, update position of the snake, and check for collision with itself, the wall, or the apple.
 8. the keyboard press detect event will change the direction value of the snake, the check for new direction event will use the direction value to determine the speed changes that need to take place, the update position event will check if the snake collides with itself or the wall, then it will end the game, or if it collides with the apple, then it will remove the apple, create a new apple in a new spot, and increase the length of the snake by 1, and change the x and y values of the snake.
