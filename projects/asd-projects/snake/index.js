@@ -50,6 +50,7 @@ function runProgram() {
   by calling this function and executing the code inside.
   */
   function newFrame() {
+    moveBody();
     drawSnake(snake);
     appleCollision();
     updateApple();
@@ -131,6 +132,12 @@ function runProgram() {
         if (checkX === x && checkY === y) {
           drawApple();
         }
+    }
+  }
+  function moveBody(snake) {
+    for (i = snake.length - 1; i < 1; i--) {
+      snake[i + 1].x = snake[i].x;
+      snake[i + 1].y = snake[i].y;
     }
   }
   function updateHeadPosition(jb) {
