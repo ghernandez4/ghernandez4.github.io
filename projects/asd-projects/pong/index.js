@@ -12,22 +12,23 @@ function runProgram(){
   const FRAMES_PER_SECOND_INTERVAL = 1000 / FRAME_RATE;
   
   // Game Item Objects
-  var ball;
-  var paddle1;
-  var paddle2;
+  var board = grabCSS('#board');
+  var ball = grabCSS('#ball');
+  var paddle1 = grabCSS('#paddleleft');
+  var paddle2 = grabCSS('#paddleright');
 
 var KEY = {
-  'W': 'w',
-  'S': 's',
-  'UP': 'ArrowUp',
-  'DOWN': 'ArrowDown'
+  W: 87,
+  S: 83,
+  UP: 38,
+  DOWN: 40
 }
 
   // one-time setup
   let interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
-  $(document).on('keyDown', handleKeyDown);                             // change 'eventType' to the type of event you want to handle
-  $(document).on('keyUp', handleKeyUp)
-
+  $(document).on('keydown', handleKeyDown);                             // change 'eventType' to the type of event you want to handle
+  $(document).on('keyup', handleKeyUp)
+startBall();
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -37,40 +38,128 @@ var KEY = {
   by calling this function and executing the code inside.
   */
   function newFrame() {
-    
-
+    moveObject(ball);
+    moveObject(paddle1);
+    moveObject(paddle2);
+    paddleCollide(paddle1,ball);
+    paddleCollide(paddle2,ball);
+    ballAndWall(ball);
+    wallPaddle(paddle1);
+    wallPaddle(paddle2);
+    checkScore();
   }
   
   /* 
   Called in response to events.
   */
   function handleKeyDown(event) {
-    if (event.key === KEY.UP) {
-      speed1 = 5;
-    } else if (event.key === KEY.DOWN) {
-      speed1 = -5;
-    } else if (event.key === KEY.W) {
-      speed2 = 5;
-    } else if (event.key === KEY.S) {
-      speed2 = -5;
+    if (event.which === KEY.UP) {
+      paddle2.speedY = -5;
+    } else if (event.which === KEY.DOWN) {
+      paddle2.speedY = 5;
+    } else if (event.which === KEY.W) {
+      paddle1.speedY = -5;
+    } else if (event.which === KEY.S) {
+      paddle1.speedY = 5;
     }
   }
   function handleKeyUp(event) {
-    if (event.key === KEY.UP || event.key === KEY.DOWN) {
-      speed1 = 0;
-    } else if (event.key === KEY.W || event.key === KEY.S) {
-      speed2 = 0;
+    if (event.which === KEY.UP || event.which === KEY.DOWN) {
+      paddle2.speedY = 0;
+    } else if (event.which === KEY.W || event.which === KEY.S) {
+      paddle1.speedY = 0;
     }
   }
-
+function grabCSS(id) {
+  let tempArr = {};
+  tempArr.id = id;
+  tempArr.width = $(id).width();
+  tempArr.height = $(id).height();
+  tempArr.x = parseFloat($(id).css('left'));
+  tempArr.y = parseFloat($(id).css('top'));
+  tempArr.speedX = 0;
+  tempArr.speedY = 0;
+  return tempArr;
+}
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-  function drawPaddle(paddle, x, y) {
-    $('#' + paddle).css('top', y);
-    $('#' + paddle).css('left', x);
+  function paddleCollide(a, b) {
+    //define paddle sides
+    a.left = a.x;
+    a.top = a.y;
+    a.right = a.x + a.width;
+    a.bottom = a.y + a.height;
+    //define ball sides
+    b.left = b.x
+    b.top = b.y
+    b.right = b.x + b.width;
+    b.bottom = b.y + b.height;
+    //check if ball and paddle collide
+if ((a.right > b.left) && (a.left < b.right) && (a.bottom > b.top) && (a.top < b.bottom)) {
+b.speedX *= -1;
+} else {
+return false;
+}
   }
-  
+  function ballAndWall(obj) {
+    board.left = board.x;
+    board.top = board.y;
+    board.right = board.x + board.width;
+    board.bottom = board.y + board.height;
+
+    obj.left = obj.x;
+    obj.top = obj.y;
+    obj.right = obj.x + obj.width;
+    obj.bottom = obj.y + obj.height;
+
+    if ((board.right >= obj.left) && (board.left <= obj.right) && (board.bottom >= obj.top) && (board.top <= obj.bottom)) {
+    } else {
+      obj.speedY *= -1;
+    }
+  }
+function wallPaddle(paddle) {
+paddle.top = paddle.y - paddle.height /2;
+paddle.bottom = paddle.y + paddle.height / 2;
+board.top = board.y;
+board.bottom = board.y + board.height;
+if (paddle.bottom > board.bottom) {
+  paddle.y = board.bottom;
+} else if (paddle.top < board.top) {
+  paddle.y = 0;
+}
+}
+function moveObject(parm) {
+  parm.x += parm.speedX;
+  parm.y += parm.speedY;
+  $(parm.id).css('top', parm.y);
+  $(parm.id).css('left', parm.x);
+  if (ball.x <= 0) {
+    didScore(score2);
+  } else if (ball.x >= board.width + board.x) {
+    didScore(score1);
+  }
+}
+function didScore(side) {
+startBall();
+side++;
+$('#' + side).text(side);
+}
+function startBall() {
+  ball.x = 150;
+  ball.y = 150;
+  var randomNum = (Math.random() * 3 + 2) * (Math.random() > 0.5 ? -1 : 1);
+  ball.speedX = randomNum;
+  ball.speedY = 5;
+}
+function checkScore() {
+  if (score1 === 10 || score2 === 10) {
+    endGame();
+  }
+  if (score1 === 6 && score2 === 9) {
+    alert('(225)242-9963')
+  }
+}
   function endGame() {
     // stop the interval timer
     clearInterval(interval);
