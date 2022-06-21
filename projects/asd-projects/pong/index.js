@@ -38,12 +38,12 @@ startBall();
   by calling this function and executing the code inside.
   */
   function newFrame() {
+    ballAndWall(ball);
     moveObject(ball);
     moveObject(paddle1);
     moveObject(paddle2);
     paddleCollide(paddle1,ball);
     paddleCollide(paddle2,ball);
-    ballAndWall(ball);
     player2();
     wallPaddle(paddle1);
     wallPaddle(paddle2);
@@ -108,9 +108,10 @@ return false;
     obj.right = obj.x + obj.width;
     obj.bottom = obj.y + obj.height;
 
-    if ((board.right >= obj.left) && (board.left <= obj.right) && (board.bottom >= obj.top) && (board.top <= obj.bottom)) {
-    } else {
+    if ((board.bottom < obj.bottom) || (board.top > obj.top)) {
       obj.speedY *= -1;
+      obj.y = board.bottom < obj.bottom ? board.bottom - obj.height : board.top;
+      $(obj.id).css('top', obj.y);
     }
   }
 function wallPaddle(paddle) {
