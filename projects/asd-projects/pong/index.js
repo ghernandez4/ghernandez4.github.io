@@ -16,6 +16,8 @@ function runProgram(){
   var ball = grabCSS('#ball');
   var paddle1 = grabCSS('#paddleleft');
   var paddle2 = grabCSS('#paddleright');
+  var score1 = 0;
+  var score2 = 0;
 
 var KEY = {
   W: 87,
@@ -103,10 +105,10 @@ return false;
 }
   }
   function ballAndWall(obj) {
-    board.left = board.x;
-    board.top = board.y;
-    board.right = board.x + board.width;
-    board.bottom = board.y + board.height;
+    board.left = 0;
+    board.top = 0;
+    board.right = board.width;
+    board.bottom = board.height;
 
     obj.left = obj.x;
     obj.top = obj.y;
@@ -119,14 +121,14 @@ return false;
     }
   }
 function wallPaddle(paddle) {
-paddle.top = paddle.y - paddle.height /2;
-paddle.bottom = paddle.y + paddle.height / 2;
-board.top = board.y;
-board.bottom = board.y + board.height;
-if (paddle.bottom > board.bottom) {
-  paddle.y = board.bottom;
-} else if (paddle.top < board.top) {
-  paddle.y = 0;
+paddle.top = paddle.y;
+paddle.bottom = paddle.y + paddle.height;
+board.top = 0;
+board.bottom = board.height;
+if (paddle.bottom > board.bottom && paddle.top > board.top) {
+  paddle.y = board.bottom - paddle.height - 1;
+} else if (paddle.top < board.top && paddle.bottom < board.bottom) {
+  paddle.y = 1;
 }
 }
 function moveObject(parm) {
@@ -135,16 +137,21 @@ function moveObject(parm) {
   $(parm.id).css('top', parm.y);
   $(parm.id).css('left', parm.x);
   if (ball.x <= 0) {
-    didScore(score2);
+    didScore2();
   } else if (ball.x >= board.width + board.x) {
-    didScore(score1);
+    didScore1();
   }
 }
-function didScore(side) {
-startBall();
-side++;
-$('#' + side).text(side);
-}
+function didScore1() {
+  startBall();
+  score1 += 1;
+  $('#score1').text(score1);
+  }
+  function didScore2() {
+    startBall();
+    score2 += 1;
+    $('#score2').text(score2);
+    }
 function startBall() {
   ball.x = 150;
   ball.y = 150;
