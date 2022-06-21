@@ -21,9 +21,7 @@ function runProgram(){
 
 var KEY = {
   W: 87,
-  S: 83,
-  UP: 38,
-  DOWN: 40
+  S: 83
 }
 
   // one-time setup
@@ -46,6 +44,7 @@ startBall();
     paddleCollide(paddle1,ball);
     paddleCollide(paddle2,ball);
     ballAndWall(ball);
+    player2();
     wallPaddle(paddle1);
     wallPaddle(paddle2);
     checkScore();
@@ -55,20 +54,14 @@ startBall();
   Called in response to events.
   */
   function handleKeyDown(event) {
-    if (event.which === KEY.UP) {
-      paddle2.speedY = -5;
-    } else if (event.which === KEY.DOWN) {
-      paddle2.speedY = 5;
-    } else if (event.which === KEY.W) {
-      paddle1.speedY = -5;
+    if (event.which === KEY.W) {
+      paddle1.speedY = -10;
     } else if (event.which === KEY.S) {
-      paddle1.speedY = 5;
+      paddle1.speedY = 10;
     }
   }
   function handleKeyUp(event) {
-    if (event.which === KEY.UP || event.which === KEY.DOWN) {
-      paddle2.speedY = 0;
-    } else if (event.which === KEY.W || event.which === KEY.S) {
+    if (event.which === KEY.W || event.which === KEY.S) {
       paddle1.speedY = 0;
     }
   }
@@ -144,24 +137,34 @@ function moveObject(parm) {
 }
 function didScore1() {
   startBall();
-  score1 += 1;
-  $('#score1').text(score1);
+  score2 += 1;
+  $('#score2').text(score2);
   }
   function didScore2() {
     startBall();
-    score2 += 1;
-    $('#score2').text(score2);
+    score1 += 1;
+    $('#score1').text(score1);
+    }
+
+    function player2() {
+      if (paddle2.y < ball.y) {
+        paddle2.speedY = 6;
+      } else if (paddle2.y > ball.y) {
+        paddle2.speedY = -6;
+      }
     }
 function startBall() {
   ball.x = 150;
   ball.y = 150;
   var randomNum = (Math.random() * 3 + 2) * (Math.random() > 0.5 ? -1 : 1);
   ball.speedX = randomNum;
-  ball.speedY = 5;
+  ball.speedY = 10;
 }
 function checkScore() {
   if (score1 === 10 || score2 === 10) {
     endGame();
+    alert('Game Ended');
+    document.location.reload();
   }
   if (score1 === 6 && score2 === 9) {
     alert('(225)242-9963')
