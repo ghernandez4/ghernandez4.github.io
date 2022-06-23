@@ -20,24 +20,10 @@ function runProgram(){
     A: 65,
     S: 83,
     D: 68,
+    C: 67
   }
-  //x-coordinate location for player 1
-  var location1X = 0;
-  //y-coordinate location for player 1
-  var location1Y = 0;
-  //x-axis speed for player 1
-  var speed1X = 0;
-  //y-axis speed for player 1
-  var speed1Y = 0;
-  //x-coordinate location for player 2
-  var location2X = 0;
-  //y-coordinate location for player 2
-  var location2Y = 0;
-  //x-axis speed for player 2
-  var speed2X = 0;
-  //x-axis speed for player 2
-  var speed2Y = 0;
-
+var walker1 = fF('#walker');
+var walker2 = fF('#walker2');
   // Game Item Objects
 
 
@@ -45,9 +31,7 @@ function runProgram(){
   var interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
   //enables controls for players 1 and 2
   $(document).on('keydown', handleKeyDown);                           // change 'eventType' to the type of event you want to handle
-  $(document).on('keyup', handleKeyUp);  
-  $(document).on('keydown', handleKeyDown2);                           // change 'eventType' to the type of event you want to handle
-  $(document).on('keyup', handleKeyUp2); 
+  $(document).on('keyup', handleKeyUp);   
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -61,118 +45,161 @@ function runProgram(){
     redrawGameItem();
     checkPosition();
     checkPosition2();
+    checkWalls(walker1, walker2);
   }
-  
+  function fF(id) {
+    var tempobj = {};
+    tempobj.id = id;
+    tempobj.x = parseFloat($(id).css('left'));
+    tempobj.y = parseFloat($(id).css('top'));
+    tempobj.speedX = 0;
+    tempobj.speedY = 0;
+    tempobj.width = $(id).width();
+    tempobj.height = $(id).height();
+    return tempobj;
+  }
   /* 
   Called in response to events.
   */
  //movement function for player 1
   function handleKeyDown(event) {
     if (event.which === KEY.DOWN) {
-      speed1Y = 5;
+      walker1.speedY = 5;
     }
     if (event.which === KEY.UP) {
-      speed1Y = -5;
+      walker1.speedY = -5;
     }
     if (event.which === KEY.RIGHT) {
-      speed1X = 5;
+      walker1.speedX = 5;
     }
     if (event.which === KEY.LEFT) {
-      speed1X = -5;
+      walker1.speedX = -5;
+    }
+    if (event.which === KEY.S) {
+      walker2.speedY = 5;
+    }
+    if (event.which === KEY.W) {
+      walker2.speedY = -5;
+    }
+    if (event.which === KEY.D) {
+      walker2.speedX = 5;
+    }
+    if (event.which === KEY.A) {
+      walker2.speedX = -5;
+    }
+    if (event.which === KEY.C) {
+      swapTeams();
     }
   } 
   function handleKeyUp(event) {
-    if (event.which !== KEY.DOWN) {
-      speed1Y = 0;
+    if (event.which === KEY.LEFT || event.which === KEY.RIGHT) {
+      walker1.speedX = 0;
     }
-    if (event.which !== KEY.UP) {
-      speed1Y = 0;
+    if (event.which === KEY.UP || event.which === KEY.DOWN) {
+      walker1.speedY = 0;
     }
-    if (event.which !== KEY.RIGHT) {
-      speed1X = 0;
+    if (event.which === KEY.S || event.which === KEY.W) {
+      walker2.speedY = 0;
     }
-    if (event.which !== KEY.DOWN) {
-      speed1X = 0;
+    if (event.which === KEY.D || event.which === KEY.A) {
+      walker2.speedX = 0;
     }
   } 
   //movement function for player 2
-  function handleKeyDown2(event) {
-    if (event.which === KEY.S) {
-      speed2Y = 5;
-    }
-    if (event.which === KEY.W) {
-      speed2Y = -5;
-    }
-    if (event.which === KEY.D) {
-      speed2X = 5;
-    }
-    if (event.which === KEY.A) {
-      speed2X = -5;
-    }
-  }
-  function handleKeyUp2(event) {
-    if (event.which !== KEY.S) {
-      speed2Y = 0;
-    }
-    if (event.which !== KEY.W) {
-      speed2Y = 0;
-    }
-    if (event.which !== KEY.D) {
-      speed2X = 0;
-    }
-    if (event.which !== KEY.A) {
-      speed2X = 0;
-    }
-  }
+  // function handleKeyDown2(event) {
+  //   if (event.which === KEY.S) {
+  //     walker2.speedY = 5;
+  //   }
+  //   if (event.which === KEY.W) {
+  //     walker2.speedY = -5;
+  //   }
+  //   if (event.which === KEY.D) {
+  //     walker2.speedX = 5;
+  //   }
+  //   if (event.which === KEY.A) {
+  //     walker2.speedX = -5;
+  //   }
+  // }
+  // function handleKeyUp2(event) {
+  //   if (event.which === KEY.S || event.which === KEY.W) {
+  //     walker2.speedY = 0;
+  //   }
+  //   if (event.which === KEY.D || event.which === KEY.A) {
+  //     walker2.speedX = 0;
+  //   }
+  // }
   //set borders for player 1
 function checkPosition() {
-  if (location1X > 390) {
-    location1X = 390;
+  if (walker1.x > 390) {
+    walker1.x = 390;
   }
-  if (location1Y > 390) {
-    location1Y = 390;
+  if (walker1.y > 390) {
+    walker1.y = 390;
   }
-  if (location1X < 0) {
-    location1X = 0;
+  if (walker1.x < 0) {
+    walker1.x = 0;
   }
-  if (location1Y < 0) {
-    location1Y = 0;
+  if (walker1.y < 0) {
+    walker1.y = 0;
   }
 }
 //set border for player 2
 function checkPosition2() {
-  if (location2X > 390) {
-    location2X = 390;
+  if (walker2.x > 390) {
+    walker2.x = 390;
   }
-  if (location2Y > 390) {
-    location2Y = 390;
+  if (walker2.y > 390) {
+    walker2.y = 390;
   }
-  if (location2X < 0) {
-    location2X = 0;
+  if (walker2.x < 0) {
+    walker2.x = 0;
   }
-  if (location2Y < 0) {
-    location2Y = 0;
+  if (walker2.y < 0) {
+    walker2.y = 0;
   }
 }
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 
+  function swapTeams() {
+    var temp = $('#walker').css('background-color');
+    var temp2 = $('#walker2').css('background-color');
+    $('#walker').css('background-color', temp2);
+    $('#walker2').css('background-color', temp);
+  }
+
   //repositions walker when keys are pressed
   function repositionGameItem() {
-    location1X += speed1X;
-    location1Y += speed1Y;
-    location2X += speed2X;
-    location2Y += speed2Y;
+    walker1.x += walker1.speedX;
+    walker1.y += walker1.speedY;
+    walker2.x += walker2.speedX;
+    walker2.y += walker2.speedY;
   }
   //redraws walker each time it moves
   function redrawGameItem() {
-    $('#walker').css("left", location1X);
-    $('#walker').css('top', location1Y);
-    $('#walker2').css("left", location2X);
-    $('#walker2').css('top', location2Y);
+    $('#walker').css("left", walker1.x);
+    $('#walker').css('top', walker1.y);
+    $('#walker2').css("left", walker2.x);
+    $('#walker2').css('top', walker2.y);
   }
   
+  function checkWalls(square1, square2) {
+    square1.left = square1.x;
+    square1.top = square1.y;
+    square1.right = square1.x + square1.width;
+    square1.bottom = square1.y + square1.height;
+    
+    // TODO: Do the same for square2
+    square2.left = square2.x
+    square2.top = square2.y
+    square2.right = square2.x + square2.width;
+    square2.bottom = square2.y + square2.height;
+    // TODO: Return true if they are overlapping, false otherwise
+if ((square1.right > square2.left) && (square1.left < square2.right) && (square1.bottom > square2.top) && (square1.top < square2.bottom)) {
+endGame();
+}
+  }
   function endGame() { 
     // stop the interval timer
     clearInterval(interval);

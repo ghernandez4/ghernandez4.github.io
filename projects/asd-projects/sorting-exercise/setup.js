@@ -12,7 +12,7 @@ const SLEEP_AMOUNT = 0;
 const MAX_SQUARES = Math.floor(Math.random() * 1000);
 
 // set constants for pseudo-random number generation
-const SEED = 2;
+const SEED = 4567;
 const FACTOR = 1774339;
 const INCREASE = 7181930;
 
